@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="main.js" defer></script>
+    <!-- TODO: REPLACE WITH TAILWIND -->
+    <link rel="stylesheet" href="main.css">
+    <title>DashB</title>
+
+    <!--Additional elements for browsers and robots go here goes here-->
+
+</head>
+
+<body>
+    <div id="app">
+        <table class="table" v-for="(item, index) in data" :key="index">
+            <thead>
+                <tr>
+                    <th v-for="(column, index) in transportTableCols" :key="index">{{column}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(vehicle, index) in item" :key="index">
+                    <td>{{vehicle.line}}</td>
+                    <td>{{vehicle.destinationName}}</td>
+                    <td>{{vehicle.waitTime}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
