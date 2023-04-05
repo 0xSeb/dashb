@@ -1,24 +1,24 @@
+// Define transportation lines with their name and url path
 const Lines = {
-    //TRAM A direction MÉRIGNAC Pin Galant / LE HAILLAN Rostand
     tramA_MPGLHR: {
         name: "TRAM A",
         urlPath: "/4587/A/route:TBT:59"
     },
-    //TRAM A direction LA GARDETTE BASSENS CARBON BLANC / FLOIRAC Dravemont
     tramA_LGBCBFD: {
         name: "TRAM A",
         urlPath: "/4588/A/route:TBT:59_R"
     },
-    // BUS 11 Direction Victoire
     bus11_Victoire: {
         name: "BUS 11",
         urlPath: "/400/11/route:TBC:11_R"
     }
-}
+};
 
+// Create an empty array to hold transportation information, and define the base URL for TBM's real-time API
 const ALL_INFO = [];
-const BASE_URL_TBM_TRANSPORT_REALTIME = "https://ws.infotbm.com/ws/1.0/get-realtime-pass"
+const BASE_URL_TBM_TRANSPORT_REALTIME = "https://ws.infotbm.com/ws/1.0/get-realtime-pass";
 
+// Define a class to hold transportation information
 class TBMVehicleInfo {
     constructor(line, destination_name, waittime) {
         this.line = line;
@@ -27,7 +27,7 @@ class TBMVehicleInfo {
     }
 }
 
-
+// Process the response from TBM's real-time API, and return an array of TBMVehicleInfo objects
 function processTBMApiCirculationResponse(line, response) {
     const vehicles = [];
     for (const destinationIndex in response.destinations) {
@@ -39,7 +39,7 @@ function processTBMApiCirculationResponse(line, response) {
     return vehicles;
 }
 
-
+// Retrieve transportation information for a given line from TBM's real-time API
 async function getTBMTransportInformation(line) {
     let response = await fetch(BASE_URL_TBM_TRANSPORT_REALTIME + line.urlPath, {
         "headers": {
@@ -51,8 +51,6 @@ async function getTBMTransportInformation(line) {
     const transportInformations = processTBMApiCirculationResponse(line.name, json);
     return transportInformations;
 }
-
-
 
 
 //TRAM A Incidents
@@ -74,8 +72,8 @@ async function getTBMTransportInformation(line) {
 //     .then(json => console.log(json));
 
 
-const { createApp } = Vue
-
+// Define Vue application and its data
+const { createApp } = Vue;
 createApp({
     data() {
         return {
@@ -84,6 +82,7 @@ createApp({
         };
     },
     methods: {
+        // Fetch transportation information for all lines and update the data object
         async fetchData() {
             ALL_INFO.push(await getTBMTransportInformation(Lines.tramA_MPGLHR));
             ALL_INFO.push(await getTBMTransportInformation(Lines.tramA_LGBCBFD));
@@ -95,4 +94,4 @@ createApp({
     mounted() {
         this.fetchData();
     },
-}).mount('#app')
+}).mount('#app');
