@@ -72,26 +72,35 @@ async function getTBMTransportInformation(line) {
 //     .then(json => console.log(json));
 
 
-// Define Vue application and its data
 const { createApp } = Vue;
+
+// Define an asynchronous function called "fetchData"
+async function fetchData() {
+    // Create an empty array called "transportInfo"
+    const transportInfo = [];
+
+    // Retrieve transportation information for tramA_MPGLHR, tramA_LGBCBFD, and bus11_Victoire and push the results into the "transportInfo" array
+    transportInfo.push(await getTBMTransportInformation(Lines.tramA_MPGLHR));
+    transportInfo.push(await getTBMTransportInformation(Lines.tramA_LGBCBFD));
+    transportInfo.push(await getTBMTransportInformation(Lines.bus11_Victoire));
+
+    // Return the "transportInfo" array with the transportation information
+    return transportInfo;
+}
+
+// Create a Vue application
 createApp({
+    // Define a data function that returns an object with two properties: "data" and "transportTableCols"
     data() {
         return {
             data: null,
             transportTableCols: ['Ligne', 'Direction', 'Temps d\'attente']
         };
     },
-    methods: {
-        // Fetch transportation information for all lines and update the data object
-        async fetchData() {
-            ALL_INFO.push(await getTBMTransportInformation(Lines.tramA_MPGLHR));
-            ALL_INFO.push(await getTBMTransportInformation(Lines.tramA_LGBCBFD));
-            ALL_INFO.push(await getTBMTransportInformation(Lines.bus11_Victoire));
-            console.log(ALL_INFO);
-            this.data = ALL_INFO;
-        },
-    },
-    mounted() {
-        this.fetchData();
-    },
+    // Define an asynchronous mounted function that sets the "data" property to the result of the "fetchData" function
+    async mounted() {
+        this.data = await fetchData();
+        console.log(this.data);
+    }
 }).mount('#app');
+
